@@ -34,6 +34,7 @@ class ModelLoader(BaseModel):
         print(f"Loading model from provider: {self.model_provider}")
         if self.model_provider == "groq":
             print("Loading LLM from Groq...............")
+            load_dotenv()
             groq_api_key = os.getenv("GROQ_API_KEY")
             model_name=self.config["llm"]["groq"]["model_name"]
             llm=ChatGroq(model_name=model_name, api_key=groq_api_key)

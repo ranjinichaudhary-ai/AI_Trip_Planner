@@ -1,3 +1,4 @@
+import re
 from utils.expense_calculator import Calculator
 from typing import List
 from langchain.tools import tool
@@ -12,10 +13,14 @@ class CalculatorTool:
         @tool
         def estimate_total_hotel_cost(price_per_night:str, total_days:float) -> float:
             """Calculate total hotel cost"""
-            return self.calculator.multiply(price_per_night,total_days)
+            normalized_price = price_per_night.replace(",", "")
+            match = re.fullmatch(r"\s*[^\d.-]*(-?\d+(?:\.\d+)?)[^\d]*\s*", normalized_price)
+            if match is None:
+                raise ValueError("price_per_night must contain one numeric price, optionally with a currency symbol.")
+            return self.calculator.multiply(float(match.group(1)), total_days)
 
         @tool
-        def calculate_total_expense(*costs: float) -> float:
+        def calculate_total_expense(costs: List[float]) -> float:
             """Calculate total expense of the trip"""
             return self.calculator.calculate_total(*costs)
 

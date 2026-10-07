@@ -10,3 +10,11 @@ uv pip install langchain
 uv pip list
 doskey/history
 uv add pandas
+
+# To run front-end
+
+streamlit run streamlit_app.py
+
+# To run backend
+
+uvicorn main:app --reload --port 8000
